@@ -57,17 +57,12 @@ export const updateProfilePic = TryCatch(async (req, res) => {
     if (!fileBuffer || !fileBuffer.content) {
         throw new ErrorHandler(500, "failed to generate buffer");
     }
-    // ✅ FIXED HERE
     const { data: uploadResult } = await axios.post(`${process.env.UPLOAD_SERVICE}/api/utils/upload`, {
         buffer: fileBuffer.content,
         public_id: oldPublicId,
     });
     const [updatedUser] = await sql `
-      UPDATE users 
-      SET profile_pic = ${uploadResult.url}, 
-          profile_pic_public_id = ${uploadResult.public_id} 
-      WHERE user_id = ${user.user_id} 
-      RETURNING user_id, name, profile_pic;
+    UPDATE users SET profile_pic = ${uploadResult.url}, profile_pic_public_id = ${uploadResult.public_id} WHERE user_id = ${user.user_id} RETURNING user_id, name, profile_pic;
     `;
     res.json({
         message: "profile pic updated",
@@ -88,17 +83,12 @@ export const updateResume = TryCatch(async (req, res) => {
     if (!fileBuffer || !fileBuffer.content) {
         throw new ErrorHandler(500, "failed to generate buffer");
     }
-    // ✅ FIXED HERE
     const { data: uploadResult } = await axios.post(`${process.env.UPLOAD_SERVICE}/api/utils/upload`, {
         buffer: fileBuffer.content,
         public_id: oldPublicId,
     });
     const [updatedUser] = await sql `
-      UPDATE users 
-      SET resume = ${uploadResult.url}, 
-          resume_public_id = ${uploadResult.public_id} 
-      WHERE user_id = ${user.user_id} 
-      RETURNING user_id, name, resume;
+    UPDATE users SET resume = ${uploadResult.url}, resume_public_id = ${uploadResult.public_id} WHERE user_id = ${user.user_id} RETURNING user_id, name, resume;
     `;
     res.json({
         message: "Resume updated",

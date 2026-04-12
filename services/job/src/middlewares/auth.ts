@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { sql } from "../utils/db.js";
 
-
 interface User {
   user_id: number;
   name: string;
@@ -17,7 +16,6 @@ interface User {
   skills: string[];
   subscription: string | null;
 }
-
 
 export interface AuthenticatedRequest extends Request {
   user?: User;

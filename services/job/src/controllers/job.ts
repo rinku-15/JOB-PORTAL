@@ -262,8 +262,6 @@ export const getSingleJob = TryCatch(async (req, res) => {
   res.json(job);
 });
 
-
-
 export const getAllApplicationForJob = TryCatch(
   async (req: AuthenticatedRequest, res) => {
     const user = req.user;
