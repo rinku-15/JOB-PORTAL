@@ -77,6 +77,7 @@ export const loginUser = TryCatch(async (req, res, next) => {
     });
 });
 export const forgotPassword = TryCatch(async (req, res, next) => {
+    console.log("Forgot API HIT");
     const { email } = req.body;
     if (!email) {
         throw new ErrorHandler(400, "email is required");

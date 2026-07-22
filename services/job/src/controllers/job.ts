@@ -127,7 +127,7 @@ export const createJob = TryCatch(async (req: AuthenticatedRequest, res) => {
   }
 
   const [newJob] =
-    await sql`INSERT INTO jobs (title, description, salary, location, role, job_type, work_location, company_id, posted_by_recuriter_id, openings) VALUES (${title}, ${description}, ${salary}, ${location}, ${role}, ${job_type}, ${work_location}, ${company_id}, ${user.user_id}, ${openings}) RETURNING *`;
+    await sql`INSERT INTO jobs (title, description, salary, location, role, job_type, work_location, company_id, posted_by_recruiter_id, openings) VALUES (${title}, ${description}, ${salary}, ${location}, ${role}, ${job_type}, ${work_location}, ${company_id}, ${user.user_id}, ${openings}) RETURNING *`;
 
   res.json({
     message: "Job posted successfully",
@@ -163,13 +163,13 @@ export const updateJob = TryCatch(async (req: AuthenticatedRequest, res) => {
   } = req.body;
 
   const [existingJob] =
-    await sql`SELECT posted_by_recuriter_id FROM jobs WHERE job_id = ${req.params.jobId}`;
+    await sql`SELECT posted_by_recruiter_id FROM jobs WHERE job_id = ${req.params.jobId}`;
 
   if (!existingJob) {
     throw new ErrorHandler(404, "Job not found");
   }
 
-  if (existingJob.posted_by_recuriter_id !== user.user_id) {
+  if (existingJob.posted_by_recruiter_id !== user.user_id) {
     throw new ErrorHandler(403, "Forbiden: You are not allowed");
   }
 
@@ -277,14 +277,14 @@ export const getAllApplicationForJob = TryCatch(
     const { jobId } = req.params;
 
     const [job] = await sql`
-    SELECT posted_by_recuriter_id FROM jobs WHERE job_id = ${jobId}
+    SELECT posted_by_recruiter_id FROM jobs WHERE job_id = ${jobId}
     `;
 
     if (!job) {
       throw new ErrorHandler(404, "job not found");
     }
 
-    if (job.posted_by_recuriter_id !== user.user_id) {
+    if (job.posted_by_recruiter_id !== user.user_id) {
       throw new ErrorHandler(403, "Forbidden you are not allowed");
     }
 
@@ -317,13 +317,13 @@ export const updateApplication = TryCatch(
     }
 
     const [job] =
-      await sql`SELECT posted_by_recuriter_id, title FROM jobs WHERE job_id = ${application.job_id}`;
+      await sql`SELECT posted_by_recruiter_id, title FROM jobs WHERE job_id = ${application.job_id}`;
 
     if (!job) {
       throw new ErrorHandler(404, "no job with this id");
     }
 
-    if (job.posted_by_recuriter_id !== user.user_id) {
+    if (job.posted_by_recruiter_id !== user.user_id) {
       throw new ErrorHandler(403, "Forbidden you are not allowed");
     }
 

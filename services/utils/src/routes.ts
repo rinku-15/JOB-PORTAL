@@ -80,7 +80,7 @@ Mastery', 'DevOps & Cloud').",
  `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-flash-latest",
       contents: prompt,
     });
 
@@ -169,7 +169,7 @@ Focus on: - File format and structure compatibility - Proper use of standard sec
 `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-flash-latest",
       contents: [
         {
           role: "user",

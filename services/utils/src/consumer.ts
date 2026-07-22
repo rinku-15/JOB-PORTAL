@@ -81,3 +81,5 @@ export const startSendMailConsumer = async () => {
     console.log("❌ Failed to start kafka consumer:", error);
   }
 };
+
+

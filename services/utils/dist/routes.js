@@ -69,7 +69,7 @@ Mastery', 'DevOps & Cloud').",
 } 
  `;
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
+            model: "gemini-flash-latest",
             contents: prompt,
         });
         let jsonResponse;
@@ -151,7 +151,7 @@ The JSON object should have the following structure:
 Focus on: - File format and structure compatibility - Proper use of standard section headings - Keyword optimization - Formatting issues (tables, columns, graphics, special characters) - Contact information placement - Date formatting - Use of action verbs and quantifiable achievements - Section organization and flow 
 `;
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
+            model: "gemini-flash-latest",
             contents: [
                 {
                     role: "user",
