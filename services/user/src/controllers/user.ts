@@ -5,6 +5,13 @@ import { sql } from "../utils/db.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import { TryCatch } from "../utils/TryCatch.js";
 
+
+interface UploadResponse {
+  url: string;
+  public_id: string;
+}
+
+
 export const myProfile = TryCatch(
   async (req: AuthenticatedRequest, res, next) => {
     const user = req.user;
@@ -85,13 +92,13 @@ export const updateProfilePic = TryCatch(
       throw new ErrorHandler(500, "failed to generate buffer");
     }
 
-    const { data: uploadResult } = await axios.post(
-      `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
-      {
-        buffer: fileBuffer.content,
-        public_id: oldPublicId,
-      }
-    );
+    const { data: uploadResult } = await axios.post<UploadResponse>(
+  `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
+  {
+    buffer: fileBuffer.content,
+    public_id: oldPublicId,
+  }
+);
 
     const [updatedUser] = await sql`
     UPDATE users SET profile_pic = ${uploadResult.url}, profile_pic_public_id = ${uploadResult.public_id} WHERE user_id = ${user.user_id} RETURNING user_id, name, profile_pic;
@@ -125,13 +132,13 @@ export const updateResume = TryCatch(async (req: AuthenticatedRequest, res) => {
     throw new ErrorHandler(500, "failed to generate buffer");
   }
 
-  const { data: uploadResult } = await axios.post(
-    `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
-    {
-      buffer: fileBuffer.content,
-      public_id: oldPublicId,
-    }
-  );
+ const { data: uploadResult } = await axios.post<UploadResponse>(
+  `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
+  {
+    buffer: fileBuffer.content,
+    public_id: oldPublicId,
+  }
+);
 
   const [updatedUser] = await sql`
     UPDATE users SET resume = ${uploadResult.url}, resume_public_id = ${uploadResult.public_id} WHERE user_id = ${user.user_id} RETURNING user_id, name, resume;
